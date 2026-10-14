@@ -50,6 +50,9 @@ private readonly string _logPath = @"C:\ProgramData\ServiceKiller\service-killer
    ```bash
    dotnet publish -c Release -r win-x64 --self-contained true
    ```
+   ```bash
+   dotnet publish .\ServiceKiller.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o C:\path\to\folder\output\ServiceKiller
+   ```
 
 2. **Install the Windows Service** (run Command Prompt or PowerShell as **Administrator**):
    ```cmd
