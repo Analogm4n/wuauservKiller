@@ -71,7 +71,3 @@ private readonly string _logPath = @"C:\ProgramData\ServiceKiller\service-killer
    ```
 
 ---
-
-## License
-
-This project is open-source and available under the [MIT License](LICENSE).
