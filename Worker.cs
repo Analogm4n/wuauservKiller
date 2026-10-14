@@ -6,6 +6,11 @@ public class Worker : BackgroundService
 {
     private readonly string _targetService = "wuauserv";
     private readonly string _logPath = @"C:\ProgramData\ServiceKiller\service-killer.log";
+    
+    // Setting for the maximum log size (example: 3 MB)
+    private const long MaxLogSizeBytes = 3 * 1024 * 1024; 
+    // Maximum number of lines to keep when trimming the log file
+    private const int MaxLinesToKeepOnTrim = 5000;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -81,11 +86,41 @@ public class Worker : BackgroundService
         string line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
         try
         {
+            // Verify if the file exists and exceeds the maximum allowed size
+            if (File.Exists(_logPath))
+            {
+                var fileInfo = new FileInfo(_logPath);
+                if (fileInfo.Length >= MaxLogSizeBytes)
+                {
+                    TrimLogFile();
+                }
+            }
+
             File.AppendAllText(_logPath, line + Environment.NewLine);
         }
         catch
         {
             // If logging to disk fails, we avoid crashing the service
+        }
+    }
+
+    private void TrimLogFile()
+    {
+        try
+        {
+            // Read all lines of the current file
+            var lines = File.ReadAllLines(_logPath);
+            
+            // If there are more lines than allowed, we keep only the last ones (most recent)
+            if (lines.Length > MaxLinesToKeepOnTrim)
+            {
+                var trimmedLines = lines.Skip(lines.Length - MaxLinesToKeepOnTrim).ToArray();
+                File.WriteAllLines(_logPath, trimmedLines);
+            }
+        }
+        catch
+        {
+            // If an error occurs while trimming, we avoid interrupting the main flow
         }
     }
 }
