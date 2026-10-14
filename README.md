@@ -47,10 +47,11 @@ private readonly string _logPath = @"C:\ProgramData\ServiceKiller\service-killer
 ## Building and Installing as a Windows Service
 
 1. **Publish the project:**
-   ```bash
+   ```powershell
    dotnet publish -c Release -r win-x64 --self-contained true
    ```
-   ```bash
+   or
+   ```powershell
    dotnet publish .\ServiceKiller.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o C:\path\to\folder\output\ServiceKiller
    ```
 
