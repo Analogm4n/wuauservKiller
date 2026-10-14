@@ -20,8 +20,8 @@ ServiceKiller/
 - **Native Windows Service Integration:** Built using `Microsoft.Extensions.Hosting.WindowsServices` to run seamlessly as a Windows background service (`ServiceKillerSvc`).
 - **Aggressive Enforcement Loop:** Runs an endless execution loop every 5 seconds to ensure the target service stays stopped and disabled.
 - **Process Execution (`sc.exe`):** Interacts directly with the Windows Service Control Manager using standard command-line tools.
-- **Robust File Logging:** Automatically handles log directory creation and records activity, stdout/stderr streams, and errors to `C:\ProgramData\ServiceKiller\service-killer.log`.
-
+- **Robust & Self-Cleaning Logging:** Automatically handles log directory creation and records activity, stdout/stderr streams, and errors to `C:\ProgramData\ServiceKiller\service-killer.log`. 
+- **Automatic Log Rotation:** Features built-in size monitoring (default limit of 3 MB) that automatically purges older log lines and retains only the most recent entries, preventing unmanaged disk space consumption over long periods.
 ---
 
 ## Prerequisites
@@ -40,6 +40,10 @@ If you want to target a different service, open `Worker.cs` and modify the priva
 ```csharp
 private readonly string _targetService = "YOUR_TARGET_SERVICE_NAME";
 private readonly string _logPath = @"C:\ProgramData\ServiceKiller\service-killer.log";
+
+// Log rotation configuration
+private const long MaxLogSizeBytes = 3 * 1024 * 1024; // 3 MB limit
+private const int MaxLinesToKeepOnTrim = 5000; // retain only the last 5,000 lines after the purge
 ```
 
 ---
