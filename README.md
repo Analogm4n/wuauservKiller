@@ -1,4 +1,4 @@
-# ServiceKiller
+# ServiceKiller 1.0
 
 `ServiceKiller` is a lightweight .NET 8 Worker Service designed to run natively on Windows. Its primary purpose is to continuously monitor, stop, and disable a specified target Windows service at regular intervals (defaulting to the Windows Update service, `wuauserv`).
 
